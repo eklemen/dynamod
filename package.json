@@ -9,7 +9,7 @@
   "scripts": {
     "rm": "rimraf ./out && mkdir out",
     "build": "node index.js",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "jest"
   },
   "keywords": [
     "nestjs",
@@ -24,6 +24,8 @@
     "lodash.camelcase": "^4.3.0",
     "lodash.capitalize": "^4.2.1",
     "lodash.kebabcase": "^4.1.1",
+    "lodash.snakecase": "^4.1.1",
+    "lodash.startcase": "^4.4.0",
     "rimraf": "^3.0.2"
   },
   "engines": {
@@ -33,5 +35,8 @@
     "LICENSE",
     "templates/",
     "index.js"
-  ]
+  ],
+  "devDependencies": {
+    "jest": "^27.0.6"
+  }
 }
