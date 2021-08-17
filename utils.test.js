@@ -74,7 +74,7 @@ describe('Utils', () => {
         fs.readFileSync.mock.calls[0][i].split('/').slice(-2).join('/')
       );
       expect(getReadFilePath(0)).toEqual('templates/module.hbs');
-      expect(fs.writeFileSync.mock.calls[0][0]).toEqual('cwd/test/test.module.ts');
+      expect(fs.writeFileSync.mock.calls[0][0]).toEqual('cwd/src/test/test.module.ts');
     });
 
     test('buildInterfaceTemplate should writeFileSync twice', () => {
@@ -84,8 +84,8 @@ describe('Utils', () => {
       );
       expect(getReadFilePath(0)).toEqual('templates/interfaces.hbs');
       expect(fs.writeFileSync).toHaveBeenCalledTimes(2);
-      expect(fs.writeFileSync.mock.calls[0][0]).toEqual('cwd/test/interfaces/test-module.interfaces.ts');
-      expect(fs.writeFileSync.mock.calls[1][0]).toEqual('cwd/test/interfaces/index.ts');
+      expect(fs.writeFileSync.mock.calls[0][0]).toEqual('cwd/src/test/interfaces/test-module.interfaces.ts');
+      expect(fs.writeFileSync.mock.calls[1][0]).toEqual('cwd/src/test/interfaces/index.ts');
     });
   });
   describe('scaffold', () => {
@@ -112,9 +112,9 @@ describe('Utils', () => {
     test('create directories for package name and interfaces', () => {
       scaffold(context, ['module']);
       expect(fs.mkdirSync).toHaveBeenCalledTimes(3);
-      expect(fs.mkdirSync).toHaveBeenCalledWith('cwd/test');
-      expect(fs.mkdirSync).toHaveBeenCalledWith('cwd/test/interfaces');
-      expect(fs.mkdirSync).toHaveBeenCalledWith('cwd/test/__tests__');
+      expect(fs.mkdirSync).toHaveBeenCalledWith('cwd/src/test');
+      expect(fs.mkdirSync).toHaveBeenCalledWith('cwd/src/test/interfaces');
+      expect(fs.mkdirSync).toHaveBeenCalledWith('cwd/src/test/__tests__');
     });
   });
 });

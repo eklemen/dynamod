@@ -20,7 +20,6 @@
     "chalk": "^4.1.2",
     "handlebars": "^4.7.7",
     "lodash.camelcase": "^4.3.0",
-    "lodash.capitalize": "^4.2.1",
     "lodash.kebabcase": "^4.1.1",
     "lodash.snakecase": "^4.1.1",
     "lodash.startcase": "^4.4.0",
