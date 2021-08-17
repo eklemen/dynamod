@@ -1,0 +1,25 @@
+import { Test, TestingModule } from '@nestjs/testing';
+import { {{this.serviceName}} } from './{{this.kebab}}.service';
+import { {{this.capital}}_OPTIONS } from './{{this.kebab}}.constants';
+
+describe('{{this.serviceName}}', () => {
+  let service: {{this.serviceName}};
+
+  beforeEach(async () => {
+    const module: TestingModule = await Test.createTestingModule({
+      providers: [
+        {{this.serviceName}},
+        {
+          provide: {{this.capital}}_OPTIONS,
+          useValue: {},
+        },
+      ],
+    }).compile();
+
+    service = module.get<{{this.serviceName}}>({{this.serviceName}});
+  });
+
+  test('should be defined', () => {
+    expect(service).toBeDefined();
+  });
+});
