@@ -1,0 +1,21 @@
+{
+  "name": "twigs",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "rm": "rimraf ./out && mkdir out",
+    "build": "node index.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "EvanK <ejklemen@gmail.com>",
+  "license": "ISC",
+  "dependencies": {
+    "chalk": "^4.1.2",
+    "handlebars": "^4.7.7",
+    "lodash.camelcase": "^4.3.0",
+    "lodash.capitalize": "^4.2.1",
+    "lodash.kebabcase": "^4.1.1",
+    "rimraf": "^3.0.2"
+  }
+}

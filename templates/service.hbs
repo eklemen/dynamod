@@ -1,0 +1,14 @@
+import { Inject, Injectable } from '@nestjs/common';
+import { {{this.capital}}_OPTIONS } from './{{this.kebab}}.constants';
+import * as optionTypes from './interfaces';
+
+@Injectable()
+export class {{this.serviceName}} {
+  constructor(
+    @Inject({{this.capital}}_OPTIONS) private options: optionTypes.{{this.pascal}}Options,
+  ) {}
+
+  public async myMethod(params: any): Promise<any> {
+    return 'myMethod';
+  }
+}

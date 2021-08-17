@@ -1,0 +1,65 @@
+import { DynamicModule, Global, Module, Provider } from '@nestjs/common';
+import { {{this.serviceName}} } from './{{this.kebab}}.service';
+import { {{this.capital}}_OPTIONS } from './{{this.kebab}}.constants';
+import * as optionTypes from './interfaces';
+
+@Global()
+@Module({})
+export class {{this.serviceName}} {
+  static register(options: optionTypes.{{this.pascal}}Options): DynamicModule {
+    return {
+      module: {{this.moduleName}},
+      providers: [
+        {
+          provide: {{this.capital}}_OPTIONS,
+          useValue: options,
+        },
+        {{this.serviceName}},
+      ],
+      exports: [{{this.serviceName}}],
+    };
+  }
+
+  static registerAsync(options: optionTypes.{{this.pascal}}AsyncOptions): DynamicModule {
+    const asyncOpts = this.createAsyncProviders(options);
+    return {
+      module: {{this.moduleName}},
+      imports: options.imports,
+      providers: [{{this.serviceName}}, ...asyncOpts],
+      exports: [{{this.serviceName}}],
+    };
+  }
+
+  private static createAsyncProviders(
+    options: optionTypes.{{this.pascal}}AsyncOptions,
+  ): Provider[] {
+    if (options.useExisting || options.useFactory) {
+      return [this.createAsyncOptionsProvider(options)];
+    }
+    return [
+      this.createAsyncOptionsProvider(options),
+      {
+        provide: options.useClass,
+        useClass: options.useClass,
+      },
+    ];
+  }
+
+  private static createAsyncOptionsProvider(
+    options: optionTypes.{{this.pascal}}AsyncOptions,
+  ): Provider {
+    if (options.useFactory) {
+      return {
+        provide: {{this.capital}}_OPTIONS,
+        useFactory: options.useFactory,
+        inject: options.inject || [],
+      };
+    }
+    return {
+      provide: {{this.capital}}_OPTIONS,
+      useFactory: async (optionsFactory: optionTypes.{{this.pascal}}OptionsFactory) =>
+        await optionsFactory.createOptions(),
+      inject: [options.useExisting || options.useClass],
+    };
+  }
+}
