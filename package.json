@@ -1,14 +1,12 @@
 {
-  "name": "twigs",
+  "name": "dynamod",
   "version": "1.0.0",
-  "description": "Create NestJS dynamic module via cli",
-  "main": "index.js",
-  "bin": {
-    "dynamod": "./index.js"
-  },
+  "description": "Generate NestJS dynamic module boilerplate via cli",
+  "main": "cli.js",
+  "bin": "./cli.js",
   "scripts": {
     "rm": "rimraf ./out && mkdir out",
-    "build": "node index.js",
+    "build": "node cli.js",
     "test": "jest"
   },
   "keywords": [
@@ -34,7 +32,8 @@
   "files": [
     "LICENSE",
     "templates/",
-    "index.js"
+    "cli.js",
+    "utils.js"
   ],
   "devDependencies": {
     "jest": "^27.0.6"
