@@ -1,15 +1,23 @@
 {
   "name": "twigs",
   "version": "1.0.0",
-  "description": "",
+  "description": "Create NestJS dynamic module via cli",
   "main": "index.js",
+  "bin": {
+    "dynamod": "./index.js"
+  },
   "scripts": {
     "rm": "rimraf ./out && mkdir out",
     "build": "node index.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
-  "author": "EvanK <ejklemen@gmail.com>",
-  "license": "ISC",
+  "keywords": [
+    "nestjs",
+    "dynamic module",
+    "generate"
+  ],
+  "author": "EvanK <ejklemen+npm@gmail.com>",
+  "license": "MIT",
   "dependencies": {
     "chalk": "^4.1.2",
     "handlebars": "^4.7.7",
@@ -17,5 +25,13 @@
     "lodash.capitalize": "^4.2.1",
     "lodash.kebabcase": "^4.1.1",
     "rimraf": "^3.0.2"
-  }
+  },
+  "engines": {
+    "node": ">= 12.0"
+  },
+  "files": [
+    "LICENSE",
+    "templates/",
+    "index.js"
+  ]
 }
