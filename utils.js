@@ -37,7 +37,7 @@ const buildTemplate = (type, context) => {
   const fileName = `${context.kebab}.${type}.ts`;
   const fullPath = `${src}/${context.kebab}/${fileName}`;
   fs.writeFileSync(fullPath, output);
-  infoLog(`Created file: ./${context.kebab}/${fileName}`);
+  infoLog(`Created file: ./src/${context.kebab}/${fileName}`);
 };
 
 const buildInterfaceTemplates = (context) => {
@@ -50,7 +50,7 @@ const buildInterfaceTemplates = (context) => {
   let fileName = `${context.kebab}-module.interfaces.ts`;
   let fullPath = `${src}/${context.kebab}/interfaces/${fileName}`;
   fs.writeFileSync(fullPath, output);
-  infoLog(`Created file: ./${context.kebab}/interfaces/${fileName}`);
+  infoLog(`Created file: ./src/${context.kebab}/interfaces/${fileName}`);
   // barrel file
   template = fs.readFileSync(path.join(__dirname, 'templates', 'interfacesIndex.hbs'), { encoding: 'utf-8' });
   compiled = Handlebars.compile(template);
@@ -58,7 +58,7 @@ const buildInterfaceTemplates = (context) => {
   fileName = 'index.ts';
   fullPath = `${src}/${context.kebab}/interfaces/${fileName}`
   fs.writeFileSync(fullPath, output);
-  infoLog(`Created file: ./${context.kebab}/interfaces/${fileName}`);
+  infoLog(`Created file: ./src/${context.kebab}/interfaces/${fileName}`);
 };
 
 const buildTestTemplates = (context) => {
@@ -71,7 +71,7 @@ const buildTestTemplates = (context) => {
   const fileName = `${context.kebab}.spec.ts`;
   const fullPath = `${src}/${context.kebab}/__tests__/${fileName}`;
   fs.writeFileSync(fullPath, output);
-  infoLog(`Created file: ./__tests__/${fileName}`);
+  infoLog(`Created file: ./src/__tests__/${fileName}`);
 };
 
 const scaffold = (context, filesToBuild) => {
@@ -88,10 +88,10 @@ const scaffold = (context, filesToBuild) => {
     buildTestTemplates(context);
     console.log(
       chalk.bold.greenBright(
-        `Success. Created package at ${currentDir}/${context.kebab}`
+        `Success. Created package at ${src}/${context.kebab}`
       ));
   } catch (err) {
-    rimraf.sync(`${currentDir}/${context.kebab}`);
+    rimraf.sync(`${src}/${context.kebab}`);
     errorLog(`Error scaffolding module: ${err}`);
   }
 }
