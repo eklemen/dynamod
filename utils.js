@@ -1,6 +1,8 @@
 const fs = require('fs');
+const path = require('path');
 const chalk = require('chalk');
 const Handlebars = require('handlebars');
+const rimraf = require('rimraf');
 
 const kebabCase = require('lodash.kebabcase');
 const capitalize = require('lodash.capitalize');
@@ -20,7 +22,7 @@ function Context(modName) {
 
 const buildTemplate = (type, context) => {
   const currentDir = process.cwd();
-  const template = fs.readFileSync(`templates/${type}.hbs`, { encoding: 'utf-8' });
+  const template = fs.readFileSync(path.join(__dirname, 'templates', `${type}.hbs`), { encoding: 'utf-8' });
   const compiled = Handlebars.compile(template);
   const output = compiled(context);
   const fileName = `${context.kebab}.${type}.ts`;
@@ -31,13 +33,13 @@ const buildTemplate = (type, context) => {
 const buildInterfaceTemplates = (context) => {
   const currentDir = process.cwd();
   // interfaces
-  let template = fs.readFileSync(`templates/interfaces.hbs`, { encoding: 'utf-8' });
+  let template = fs.readFileSync(path.join(__dirname, 'templates', 'interfaces.hbs'), { encoding: 'utf-8' });
   let compiled = Handlebars.compile(template);
   let output = compiled(context);
   let fileName = `${context.kebab}-module.interfaces.ts`;
   fs.writeFileSync(`${currentDir}/${context.camel}/interfaces/${fileName}`, output);
   // barrel file
-  template = fs.readFileSync(`templates/interfacesIndex.hbs`, { encoding: 'utf-8' });
+  template = fs.readFileSync(path.join(__dirname, 'templates', 'interfacesIndex.hbs'), { encoding: 'utf-8' });
   compiled = Handlebars.compile(template);
   output = compiled(context);
   fileName = 'index.ts';
@@ -59,7 +61,7 @@ const scaffold = (context, filesToBuild) => {
         `Success. Created package at ${currentDir}/${context.camel}`
       ));
   } catch (err) {
-    // rimraf(`${currentDir}/${context.camel}`);
+    rimraf.sync(`${currentDir}/${context.camel}`);
     console.log(
       chalk.red.bold(`Error scaffolding module: ${err}`)
     );

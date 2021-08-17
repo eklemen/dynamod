@@ -6,7 +6,7 @@
   "bin": "./cli.js",
   "scripts": {
     "rm": "rimraf ./out && mkdir out",
-    "build": "node cli.js",
+    "build": "",
     "test": "jest"
   },
   "keywords": [

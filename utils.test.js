@@ -1,4 +1,5 @@
 const fs = require('fs');
+const rimraf = require('rimraf');
 
 const {
   Context,
@@ -87,6 +88,7 @@ describe('Utils', () => {
       jest.spyOn(fs, 'writeFileSync').mockReturnValue(null);
       jest.spyOn(fs, 'readFileSync');
       jest.spyOn(fs, 'mkdirSync').mockReturnValue(null);
+      jest.spyOn(rimraf, 'sync').mockReturnValue(null);
       jest.spyOn(process, 'cwd').mockReturnValue('cwd');
       context = {
         camel: 'test',
