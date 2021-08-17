@@ -5,7 +5,7 @@ import * as optionTypes from './interfaces';
 
 @Global()
 @Module({})
-export class {{this.serviceName}} {
+export class {{this.moduleName}} {
   static register(options: optionTypes.{{this.pascal}}Options): DynamicModule {
     return {
       module: {{this.moduleName}},
