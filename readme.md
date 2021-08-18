@@ -9,9 +9,9 @@ npx dynamod <module name>
 ## example
 npx dynamod banana
 ```
-**NOTE: this will place the directory within ./src**
+**NOTE: this will place the directory within `./src`**
 
-### Output
+#### Output
 ```shell
 banana
 ├── banana.constants.ts
@@ -22,7 +22,18 @@ banana
     └── index.ts
 ```
 
-This sets you up with `register` and `registerAsync` methods in your module.
+### Options
+If you want to generate the module to be a standalone package (to publish to npm for example), you can pass the `package` flag to generate additional files like package.json, .eslintrc, etc.
+```shell
+mkdir examplemod
+cd examplemod
+
+npx dynamod examplemod --project
+# or
+npx dynamod examplemod -p
+```
+
+Final product either way sets you up with `register` and `registerAsync` methods in your module.
 
 The generated module is [**global**](https://docs.nestjs.com/modules#global-modules). If you do not want your module global remove the `@Global` decorator in the `*.module.ts` file.
 
