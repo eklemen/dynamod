@@ -1,8 +1,10 @@
 const fs = require('fs');
+const mkdirp = require('mkdirp');
 const path = require('path');
 const chalk = require('chalk');
 const Handlebars = require('handlebars');
 const rimraf = require('rimraf');
+const copySync = require('fs-extra').copySync;
 
 const kebabCase = require('lodash.kebabcase');
 const camelCase = require('lodash.camelcase');
@@ -18,7 +20,15 @@ const errorLog = log => {
   );
 };
 
-function Context(modName) {
+const basePath = ({ isPackage, kebab }) => {
+  const currentDir = process.cwd();
+  return isPackage ? `${currentDir}/src` : `${currentDir}/src/${kebab}`;
+};
+const prettyPrintDirectory = ({ isPackage, kebab }) => {
+  return isPackage ? `${path.basename(path.resolve())}/src` : `${path.basename(path.resolve())}/src/${kebab}`;
+};
+
+function Context(modName, isPackage) {
   this.name = modName;
   this.capital = snakeCase(this.name).toUpperCase();
   this.kebab = kebabCase(this.name.toLowerCase());
@@ -26,61 +36,63 @@ function Context(modName) {
   this.camel = camelCase(this.name)
   this.moduleName = `${this.pascal}Module`;
   this.serviceName = `${this.pascal}Service`;
+  this.isPackage = isPackage;
 }
 
 const buildTemplate = (type, context) => {
-  const currentDir = process.cwd();
-  const src = `${currentDir}/src`;
   const template = fs.readFileSync(path.join(__dirname, 'templates', `${type}.hbs`), { encoding: 'utf-8' });
   const compiled = Handlebars.compile(template);
   const output = compiled(context);
   const fileName = `${context.kebab}.${type}.ts`;
-  const fullPath = `${src}/${context.kebab}/${fileName}`;
+  const fullPath = `${basePath(context)}/${fileName}`;
   fs.writeFileSync(fullPath, output);
-  infoLog(`Created file: ./src/${context.kebab}/${fileName}`);
+  infoLog(`Created file: ${prettyPrintDirectory(context)}/${fileName}`);
 };
 
 const buildInterfaceTemplates = (context) => {
-  const currentDir = process.cwd();
-  const src = `${currentDir}/src`;
   // interfaces
   let template = fs.readFileSync(path.join(__dirname, 'templates', 'interfaces.hbs'), { encoding: 'utf-8' });
   let compiled = Handlebars.compile(template);
   let output = compiled(context);
   let fileName = `${context.kebab}-module.interfaces.ts`;
-  let fullPath = `${src}/${context.kebab}/interfaces/${fileName}`;
+  let fullPath = `${basePath(context)}/interfaces/${fileName}`;
   fs.writeFileSync(fullPath, output);
-  infoLog(`Created file: ./src/${context.kebab}/interfaces/${fileName}`);
+  infoLog(`Created file: ${prettyPrintDirectory(context)}/interfaces/${fileName}`);
   // barrel file
   template = fs.readFileSync(path.join(__dirname, 'templates', 'interfacesIndex.hbs'), { encoding: 'utf-8' });
   compiled = Handlebars.compile(template);
   output = compiled(context);
   fileName = 'index.ts';
-  fullPath = `${src}/${context.kebab}/interfaces/${fileName}`
+  fullPath = `${basePath(context)}/interfaces/${fileName}`
   fs.writeFileSync(fullPath, output);
-  infoLog(`Created file: ./src/${context.kebab}/interfaces/${fileName}`);
+  infoLog(`Created file: ${prettyPrintDirectory(context)}/interfaces/${fileName}`);
 };
 
 const buildTestTemplates = (context) => {
-  const currentDir = process.cwd();
-  const src = `${currentDir}/src`;
   // interfaces
   const template = fs.readFileSync(path.join(__dirname, 'templates', 'spec.hbs'), { encoding: 'utf-8' });
   const compiled = Handlebars.compile(template);
   const output = compiled(context);
   const fileName = `${context.kebab}.spec.ts`;
-  const fullPath = `${src}/${context.kebab}/__tests__/${fileName}`;
+  const fullPath = `${basePath(context)}/__tests__/${fileName}`;
   fs.writeFileSync(fullPath, output);
-  infoLog(`Created file: ./src/__tests__/${fileName}`);
+  infoLog(`Created file: ${prettyPrintDirectory(context)}/__tests__/${fileName}`);
+};
+
+const copyPackageFiles = (context) => {
+  const currentDir = process.cwd();
+  copySync(path.join(__dirname, 'templates', 'package-files'), currentDir);
+  buildTemplate('index', context);
 };
 
 const scaffold = (context, filesToBuild) => {
-  const currentDir = process.cwd();
-  const src = `${currentDir}/src`;
   try {
-    fs.mkdirSync(`${src}/${context.kebab}`);
-    fs.mkdirSync(`${src}/${context.kebab}/interfaces`);
-    fs.mkdirSync(`${src}/${context.kebab}/__tests__`);
+    mkdirp.sync(`${basePath(context)}`);
+    mkdirp.sync(`${basePath(context)}/interfaces`);
+    mkdirp.sync(`${basePath(context)}/__tests__`);
+    if (context.isPackage) {
+      copyPackageFiles(context);
+    }
     for (let type of filesToBuild) {
       buildTemplate(type, context);
     }
@@ -88,10 +100,12 @@ const scaffold = (context, filesToBuild) => {
     buildTestTemplates(context);
     console.log(
       chalk.bold.greenBright(
-        `Success. Created package at ${src}/${context.kebab}`
+        `Success. Created package at ${prettyPrintDirectory(context)}`
       ));
   } catch (err) {
-    rimraf.sync(`${src}/${context.kebab}`);
+    context.isPackage
+    ? rimraf.sync(`${process.cwd()}/{*,.*}`)
+    : rimraf.sync(`${basePath(context)}`);
     errorLog(`Error scaffolding module: ${err}`);
   }
 }

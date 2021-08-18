@@ -1,4 +1,5 @@
 const fs = require('fs');
+const mkdirp = require('mkdirp');
 const rimraf = require('rimraf');
 
 const {
@@ -7,6 +8,14 @@ const {
   buildInterfaceTemplates,
   scaffold
 } = require('./utils');
+
+jest.mock('mkdirp', () => ({
+  sync: jest.fn()
+}));
+
+jest.mock('fs-extra', () => ({
+  copySync: jest.fn()
+}));
 
 describe('Utils', () => {
   describe('Context constructor', () => {
@@ -111,10 +120,10 @@ describe('Utils', () => {
     });
     test('create directories for package name and interfaces', () => {
       scaffold(context, ['module']);
-      expect(fs.mkdirSync).toHaveBeenCalledTimes(3);
-      expect(fs.mkdirSync).toHaveBeenCalledWith('cwd/src/test');
-      expect(fs.mkdirSync).toHaveBeenCalledWith('cwd/src/test/interfaces');
-      expect(fs.mkdirSync).toHaveBeenCalledWith('cwd/src/test/__tests__');
+      expect(mkdirp.sync).toHaveBeenCalledTimes(3);
+      expect(mkdirp.sync).toHaveBeenCalledWith('cwd/src/test');
+      expect(mkdirp.sync).toHaveBeenCalledWith('cwd/src/test/interfaces');
+      expect(mkdirp.sync).toHaveBeenCalledWith('cwd/src/test/__tests__');
     });
   });
 });

@@ -1,10 +1,10 @@
 #!/usr/bin/env node
 const fs = require('fs');
 const chalk = require('chalk');
-// const rimraf = require('rimraf');
 const moduleName = process.argv[2];
+const isPackage = process.argv.includes('--package') || process.argv.includes('-p');
 if (!moduleName) {
-  console.error(chalk.red.bold('Must supply a name for this module. Ex: $ twig my-module'));
+  console.error(chalk.red.bold('Must supply a name for this module. Ex: $ dynamod my-module'));
   process.exit(1);
 }
 const {
@@ -12,7 +12,7 @@ const {
   scaffold,
 } = require('./utils')
 
-const context = new Context(moduleName);
+const context = new Context(moduleName, isPackage);
 const filesToBuild = [
   'module',
   'service',
