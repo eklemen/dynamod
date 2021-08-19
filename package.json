@@ -1,6 +1,6 @@
 {
   "name": "dynamod",
-  "version": "1.0.6",
+  "version": "1.0.7",
   "description": "Generate NestJS dynamic module boilerplate via cli",
   "main": "cli.js",
   "bin": "./cli.js",
@@ -8,6 +8,10 @@
     "rm": "rimraf ./out && mkdir out",
     "build": "",
     "test": "jest"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/eklemen/dynamod"
   },
   "keywords": [
     "nestjs",
@@ -32,6 +36,7 @@
   },
   "files": [
     "templates/**",
+    "templates/package-files/",
     "utils.js"
   ],
   "devDependencies": {
