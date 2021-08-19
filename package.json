@@ -1,6 +1,6 @@
 {
   "name": "dynamod",
-  "version": "1.0.7",
+  "version": "1.0.12",
   "description": "Generate NestJS dynamic module boilerplate via cli",
   "main": "cli.js",
   "bin": "./cli.js",
@@ -36,7 +36,6 @@
   },
   "files": [
     "templates/**",
-    "templates/package-files/",
     "utils.js"
   ],
   "devDependencies": {

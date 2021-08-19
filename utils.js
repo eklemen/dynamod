@@ -4,7 +4,6 @@ const path = require('path');
 const chalk = require('chalk');
 const Handlebars = require('handlebars');
 const rimraf = require('rimraf');
-const copySync = require('fs-extra').copySync;
 
 const kebabCase = require('lodash.kebabcase');
 const camelCase = require('lodash.camelcase');
@@ -39,11 +38,11 @@ function Context(modName, isPackage) {
   this.isPackage = isPackage;
 }
 
-const buildTemplate = (type, context) => {
+const buildTemplate = (type, context, prefix=true) => {
   const template = fs.readFileSync(path.join(__dirname, 'templates', `${type}.hbs`), { encoding: 'utf-8' });
   const compiled = Handlebars.compile(template);
   const output = compiled(context);
-  const fileName = `${context.kebab}.${type}.ts`;
+  const fileName = prefix ? `${context.kebab}.${type}.ts` : `${type}.ts`;
   const fullPath = `${basePath(context)}/${fileName}`;
   fs.writeFileSync(fullPath, output);
   infoLog(`Created file: ${prettyPrintDirectory(context)}/${fileName}`);
@@ -81,8 +80,18 @@ const buildTestTemplates = (context) => {
 
 const copyPackageFiles = (context) => {
   const currentDir = process.cwd();
-  copySync(path.join(__dirname, 'templates', 'package-files'), currentDir);
-  buildTemplate('index', context);
+  const packageDir = path.join(__dirname, 'templates', 'package-files');
+  const files = fs.readdirSync(packageDir);
+  for (let file of files) {
+    let template = fs.readFileSync(path.join(__dirname, 'templates', 'package-files', file), { encoding: 'utf-8' });
+    let compiled = Handlebars.compile(template);
+    let output = compiled(context);
+    let fileName = file.slice(0, -4);
+    let fullPath = `${currentDir}/${fileName}`;
+    fs.writeFileSync(fullPath, output);
+    infoLog(`Created file: ${path.basename(path.resolve())}/${fileName}`);
+  }
+  buildTemplate('index', context, false);
 };
 
 const scaffold = (context, filesToBuild) => {
