@@ -27,7 +27,7 @@ const prettyPrintDirectory = ({ isPackage, kebab }) => {
   return isPackage ? `${path.basename(path.resolve())}/src` : `${path.basename(path.resolve())}/src/${kebab}`;
 };
 
-function Context(modName, isPackage) {
+function Context(modName, isPackage, isGlobal) {
   this.name = modName;
   this.capital = snakeCase(this.name).toUpperCase();
   this.kebab = kebabCase(this.name.toLowerCase());
@@ -36,6 +36,7 @@ function Context(modName, isPackage) {
   this.moduleName = `${this.pascal}Module`;
   this.serviceName = `${this.pascal}Service`;
   this.isPackage = isPackage;
+  this.isGlobal = isGlobal;
 }
 
 const buildTemplate = (type, context, prefix=true) => {

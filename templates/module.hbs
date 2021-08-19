@@ -3,7 +3,6 @@ import { {{this.serviceName}} } from './{{this.kebab}}.service';
 import { {{this.capital}}_OPTIONS } from './{{this.kebab}}.constants';
 import * as optionTypes from './interfaces';
 
-@Global()
 @Module({})
 export class {{this.moduleName}} {
   static register(options: optionTypes.{{this.pascal}}Options): DynamicModule {
@@ -17,6 +16,9 @@ export class {{this.moduleName}} {
         {{this.serviceName}},
       ],
       exports: [{{this.serviceName}}],
+      {{#if this.isGlobal}}
+      global: true,
+      {{/if}}
     };
   }
 
@@ -27,6 +29,9 @@ export class {{this.moduleName}} {
       imports: options.imports,
       providers: [{{this.serviceName}}, ...asyncOpts],
       exports: [{{this.serviceName}}],
+      {{#if this.isGlobal}}
+      global: true,
+      {{/if}}
     };
   }
 

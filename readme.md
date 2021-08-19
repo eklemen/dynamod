@@ -23,7 +23,13 @@ banana
 ```
 
 ### Options
-If you want to generate the module to be a standalone package (to publish to npm for example), you can pass the `package` flag to generate additional files like package.json, .eslintrc, etc.
+
+| Config | Flag | Output |                                                                                                       
+|--------|------|--------|
+| Scaffold as standalone package| --package -p | Generate the module to be a standalone package (to publish to npm for example). Generates extra files: package.json, readme, and dotfiles. |
+| Global Module | --global -g  | Passes `{global: true}` to module creation methods to scaffold a [**global module**](https://docs.nestjs.com/modules#global-modules).                                               |
+
+Example
 ```shell
 mkdir examplemod
 cd examplemod
@@ -34,8 +40,6 @@ npx dynamod examplemod -p
 ```
 
 Final product either way sets you up with `register` and `registerAsync` methods in your module.
-
-The generated module is [**global**](https://docs.nestjs.com/modules#global-modules). If you do not want your module global remove the `@Global` decorator in the `*.module.ts` file.
 
 ### Use within your app
 ```typescript
