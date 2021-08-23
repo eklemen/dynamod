@@ -1,4 +1,7 @@
-<img src="./assets/dynamodlogo.svg">
+<div style="text-align: center;">
+<img style="width: 120px;" src="./assets/dynamodlogo.svg">
+</div>
+
 # dynamod
 
 Generate boilerplate for [NestJS dynamic modules](https://docs.nestjs.com/fundamentals/dynamic-modules#dynamic-modules) similar to how the native NestJS cli lets you create simple modules/services.
