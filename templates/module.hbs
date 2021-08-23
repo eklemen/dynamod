@@ -1,4 +1,4 @@
-import { DynamicModule, Global, Module, Provider } from '@nestjs/common';
+import { DynamicModule, Module, Provider } from '@nestjs/common';
 import { {{this.serviceName}} } from './{{this.kebab}}.service';
 import { {{this.capital}}_OPTIONS } from './{{this.kebab}}.constants';
 import * as optionTypes from './interfaces';
@@ -16,9 +16,7 @@ export class {{this.moduleName}} {
         {{this.serviceName}},
       ],
       exports: [{{this.serviceName}}],
-      {{#if this.isGlobal}}
-      global: true,
-      {{/if}}
+      global: {{#if this.isGlobal}}true,{{else}}false,{{/if}}
     };
   }
 
@@ -29,12 +27,12 @@ export class {{this.moduleName}} {
       imports: options.imports,
       providers: [{{this.serviceName}}, ...asyncOpts],
       exports: [{{this.serviceName}}],
-      {{#if this.isGlobal}}
-      global: true,
-      {{/if}}
+      global: {{#if this.isGlobal}}true,{{else}}false,{{/if}}
     };
   }
 
+// The methods below are used to create dynamic options.
+// Do not modify unless you know what you are doing.
   private static createAsyncProviders(
     options: optionTypes.{{this.pascal}}AsyncOptions,
   ): Provider[] {
