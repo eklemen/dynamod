@@ -1,6 +1,6 @@
-<div style="text-align: center;">
-<img style="width: 120px;" src="./assets/dynamodlogo.svg">
-</div>
+<p align="center">
+<img width="120" src="./assets/dynamodlogo.svg">
+</p>
 
 # dynamod
 
