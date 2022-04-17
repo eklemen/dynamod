@@ -37,7 +37,8 @@ npx dynamod banana
 ```
 
 ### Usage as package
-_Note: You must first make the directory that your standalone package will live. Auto generating this directory is a future improvement._
+This will create the directory as a kebab-case version of the module name.
+
 ```shell
 mkdir examplemod
 cd examplemod
@@ -49,22 +50,22 @@ npx dynamod examplemod -p
 
 #### Output
 ```shell
-./
-├── README.md
-├── nest-cli.json
-├── package.json
-├── src
-│   ├── __tests__
-│   │   └── examplemod.spec.ts
-│   ├── examplemod.constants.ts
-│   ├── examplemod.module.ts
-│   ├── examplemod.service.ts
-│   ├── index.ts
-│   └── interfaces
-│       ├── examplemod-module.interfaces.ts
-│       └── index.ts
-├── tsconfig.build.json
-└── tsconfig.json
+./examplemod/
+  ├── README.md
+  ├── nest-cli.json
+  ├── package.json
+  ├── src
+  │   ├── __tests__
+  │   │   └── examplemod.spec.ts
+  │   ├── examplemod.constants.ts
+  │   ├── examplemod.module.ts
+  │   ├── examplemod.service.ts
+  │   ├── index.ts
+  │   └── interfaces
+  │       ├── examplemod-module.interfaces.ts
+  │       └── index.ts
+  ├── tsconfig.build.json
+  └── tsconfig.json
 ```
 
 ### Options
@@ -72,7 +73,7 @@ npx dynamod examplemod -p
 | Config | Flag | Output |                                                                                                       
 |--------|------|--------|
 | Scaffold as standalone package| --package <br/> -p | Generate the module to be a standalone package (to publish to npm for example). Generates extra files: package.json, readme, and dotfiles. |
-| Global Module | --global <br/> -g  | Passes `{global: true}` to module creation methods to scaffold a [**global module**](https://docs.nestjs.com/modules#global-modules). This can be changed later or added to your module's configs at any time.|
+
 
 Final product either way sets you up with `register` and `registerAsync` methods in your module.
 

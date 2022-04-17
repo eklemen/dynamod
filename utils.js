@@ -21,13 +21,18 @@ const errorLog = log => {
 
 const basePath = ({ isPackage, kebab }) => {
   const currentDir = process.cwd();
-  return isPackage ? `${currentDir}/src` : `${currentDir}/src/${kebab}`;
+  if (isPackage) {
+    mkdirp.sync(kebab);
+    return path.join(currentDir, kebab, 'src');
+  } else {
+    return path.join(currentDir, 'src', kebab);
+  }
 };
 const prettyPrintDirectory = ({ isPackage, kebab }) => {
   return isPackage ? `${path.basename(path.resolve())}/src` : `${path.basename(path.resolve())}/src/${kebab}`;
 };
 
-function Context(modName, isPackage, isGlobal) {
+function Context(modName, isPackage) {
   this.name = modName;
   this.capital = snakeCase(this.name).toUpperCase();
   this.kebab = kebabCase(this.name.toLowerCase());
@@ -36,7 +41,6 @@ function Context(modName, isPackage, isGlobal) {
   this.moduleName = `${this.pascal}Module`;
   this.serviceName = `${this.pascal}Service`;
   this.isPackage = isPackage;
-  this.isGlobal = isGlobal;
 }
 
 const buildTemplate = (type, context, prefix=true) => {
@@ -44,7 +48,7 @@ const buildTemplate = (type, context, prefix=true) => {
   const compiled = Handlebars.compile(template);
   const output = compiled(context);
   const fileName = prefix ? `${context.kebab}.${type}.ts` : `${type}.ts`;
-  const fullPath = `${basePath(context)}/${fileName}`;
+  const fullPath = path.join(basePath(context), fileName);
   fs.writeFileSync(fullPath, output);
   infoLog(`Created file: ${prettyPrintDirectory(context)}/${fileName}`);
 };
@@ -55,7 +59,7 @@ const buildInterfaceTemplates = (context) => {
   let compiled = Handlebars.compile(template);
   let output = compiled(context);
   let fileName = `${context.kebab}-module.interfaces.ts`;
-  let fullPath = `${basePath(context)}/interfaces/${fileName}`;
+  let fullPath = path.join(basePath(context), 'interfaces', fileName);
   fs.writeFileSync(fullPath, output);
   infoLog(`Created file: ${prettyPrintDirectory(context)}/interfaces/${fileName}`);
   // barrel file
@@ -63,18 +67,17 @@ const buildInterfaceTemplates = (context) => {
   compiled = Handlebars.compile(template);
   output = compiled(context);
   fileName = 'index.ts';
-  fullPath = `${basePath(context)}/interfaces/${fileName}`
+  fullPath = path.join(basePath(context), 'interfaces', fileName);
   fs.writeFileSync(fullPath, output);
   infoLog(`Created file: ${prettyPrintDirectory(context)}/interfaces/${fileName}`);
 };
 
 const buildTestTemplates = (context) => {
-  // interfaces
   const template = fs.readFileSync(path.join(__dirname, 'templates', 'spec.hbs'), { encoding: 'utf-8' });
   const compiled = Handlebars.compile(template);
   const output = compiled(context);
   const fileName = `${context.kebab}.spec.ts`;
-  const fullPath = `${basePath(context)}/__tests__/${fileName}`;
+  const fullPath = path.join(basePath(context), '__tests__', fileName);
   fs.writeFileSync(fullPath, output);
   infoLog(`Created file: ${prettyPrintDirectory(context)}/__tests__/${fileName}`);
 };
@@ -88,7 +91,7 @@ const copyPackageFiles = (context) => {
     let compiled = Handlebars.compile(template);
     let output = compiled(context);
     let fileName = file.slice(0, -4);
-    let fullPath = `${currentDir}/${fileName}`;
+    let fullPath = path.join(currentDir, context.kebab, fileName);
     fs.writeFileSync(fullPath, output);
     infoLog(`Created file: ${path.basename(path.resolve())}/${fileName}`);
   }

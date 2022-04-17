@@ -1,1 +1,20 @@
 # {{this.kebab}}
+## Use within your app
+```typescript
+@Module({
+// ...
+  imports: [
+    ConfigModule.forRoot(),
+    {{this.moduleName}}.registerAsync({
+      imports: [ConfigModule],
+      useFactory: async (configService: ConfigService) => ({
+        someValue: configService.get<string>('SOME_VALUE'),
+        anotherValue: 'static config',
+      }),
+      inject: [ConfigService],
+    }),
+  ],
+})
+```
+### Other ways to register module
+* `{{this.moduleName}}.register({configs...})`
