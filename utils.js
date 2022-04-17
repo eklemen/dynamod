@@ -22,20 +22,17 @@ const errorLog = log => {
 const basePath = ({ isPackage, kebab }) => {
   const currentDir = process.cwd();
   if (isPackage) {
-    console.log('isPackage: ', isPackage);
     mkdirp.sync(kebab);
-    console.log('path.join curr kebab src-------->', path.join(currentDir, kebab, 'src'));
     return path.join(currentDir, kebab, 'src');
   } else {
     return path.join(currentDir, 'src', kebab);
   }
-  // return isPackage ? `${currentDir}/src` : `${currentDir}/src/${kebab}`;
 };
 const prettyPrintDirectory = ({ isPackage, kebab }) => {
   return isPackage ? `${path.basename(path.resolve())}/src` : `${path.basename(path.resolve())}/src/${kebab}`;
 };
 
-function Context(modName, isPackage, isGlobal) {
+function Context(modName, isPackage) {
   this.name = modName;
   this.capital = snakeCase(this.name).toUpperCase();
   this.kebab = kebabCase(this.name.toLowerCase());
@@ -44,8 +41,6 @@ function Context(modName, isPackage, isGlobal) {
   this.moduleName = `${this.pascal}Module`;
   this.serviceName = `${this.pascal}Service`;
   this.isPackage = isPackage;
-  this.isGlobal = isGlobal;
-  this.dirPrefix = isPackage ? `${this.kebab}/` : '';
 }
 
 const buildTemplate = (type, context, prefix=true) => {
@@ -78,7 +73,6 @@ const buildInterfaceTemplates = (context) => {
 };
 
 const buildTestTemplates = (context) => {
-  // interfaces
   const template = fs.readFileSync(path.join(__dirname, 'templates', 'spec.hbs'), { encoding: 'utf-8' });
   const compiled = Handlebars.compile(template);
   const output = compiled(context);

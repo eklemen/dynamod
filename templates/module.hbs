@@ -5,7 +5,7 @@ import * as optionTypes from './interfaces';
 
 @Module({})
 export class {{this.moduleName}} {
-  static register(options: optionTypes.{{this.pascal}}Options): DynamicModule {
+  static register(options: optionTypes.{{this.pascal}}Options, isGlobal: boolean): DynamicModule {
     return {
       module: {{this.moduleName}},
       providers: [
@@ -16,18 +16,19 @@ export class {{this.moduleName}} {
         {{this.serviceName}},
       ],
       exports: [{{this.serviceName}}],
-      global: {{#if this.isGlobal}}true,{{else}}false,{{/if}}
+      global: isGlobal,
     };
   }
 
   static registerAsync(options: optionTypes.{{this.pascal}}AsyncOptions): DynamicModule {
-    const asyncOpts = this.createAsyncProviders(options);
+    const { isGlobal, ...opts } = options;
+    const asyncOpts = this.createAsyncProviders(opts);
     return {
       module: {{this.moduleName}},
-      imports: options.imports,
+      imports: opts.imports,
       providers: [{{this.serviceName}}, ...asyncOpts],
       exports: [{{this.serviceName}}],
-      global: {{#if this.isGlobal}}true,{{else}}false,{{/if}}
+      global: isGlobal,
     };
   }
 

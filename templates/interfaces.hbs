@@ -15,4 +15,5 @@ export interface {{this.pascal}}AsyncOptions extends Pick<ModuleMetadata, 'impor
     ...args: any[]
   ) => Promise<{{this.pascal}}Options> | {{this.pascal}}Options;
   inject?: any[];
+  isGlobal?: boolean;
 }
